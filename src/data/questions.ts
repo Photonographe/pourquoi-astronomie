@@ -79,14 +79,24 @@ export async function getAllQuestions(): Promise<Question[]> {
       category: entry.data.category
     }));
     
-    // Si pas de questions CMS, utiliser les questions par défaut
-    if (cmsQuestions.length === 0) {
-      return getDefaultQuestions();
-    }
+    // Récupérer les questions par défaut
+    const defaultQuestions = getDefaultQuestions();
     
-    return cmsQuestions;
+    // Fusionner les questions CMS avec les questions par défaut
+    // Les questions CMS ont la priorité (si même ID, CMS écrase par défaut)
+    const allQuestions = [...cmsQuestions];
+    
+    // Ajouter les questions par défaut qui ne sont pas déjà présentes
+    defaultQuestions.forEach(defaultQuestion => {
+      const existsInCms = cmsQuestions.some(cmsQ => cmsQ.id === defaultQuestion.id);
+      if (!existsInCms) {
+        allQuestions.push(defaultQuestion);
+      }
+    });
+    
+    return allQuestions;
   } catch (error) {
-    console.log('CMS pas encore configuré, utilisation du contenu par défaut');
+    console.log('CMS pas encore configuré ou erreur, utilisation du contenu par défaut');
     return getDefaultQuestions();
   }
 }
@@ -109,7 +119,7 @@ export async function searchQuestions(query: string): Promise<Question[]> {
   );
 }
 
-// Questions par défaut (fallback)
+// Questions par défaut (fallback et exemples)
 function getDefaultQuestions(): Question[] {
   return [
     {
