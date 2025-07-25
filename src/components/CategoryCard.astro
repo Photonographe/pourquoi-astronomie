@@ -1,0 +1,159 @@
+---
+import type { Category } from '../data/questions.ts';
+
+interface Props {
+  category: Category;
+  featured?: boolean;
+}
+
+const { category, featured = false } = Astro.props;
+---
+
+<div class={`category-card ${featured ? 'featured' : ''}`} data-category={category.id}>
+  <div class="category-icon">{category.icon}</div>
+  <h3 class="category-title">{category.name}</h3>
+  <p class="category-description">{category.description}</p>
+  <div class="category-cta">
+    <a href={`/categories/${category.id}`} class="category-link">
+      Explorer cette catégorie
+    </a>
+  </div>
+</div>
+
+<style define:vars={{ categoryColor: category.color }}>
+  .category-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    text-align: center;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border: 2px solid transparent;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .category-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--categoryColor), transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  
+  .category-card:hover {
+    transform: translateY(-10px);
+    border-color: var(--categoryColor);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  }
+  
+  .category-card:hover::before {
+    opacity: 1;
+  }
+  
+  .category-card.featured {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05));
+    border-color: var(--color-primary);
+  }
+  
+  .category-card.featured::before {
+    opacity: 1;
+    background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+  }
+  
+  .category-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    display: block;
+    transition: transform 0.3s ease;
+  }
+  
+  .category-card:hover .category-icon {
+    transform: scale(1.1) rotate(5deg);
+  }
+  
+  .category-title {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: var(--categoryColor);
+    font-weight: bold;
+  }
+  
+  .category-description {
+    color: var(--color-text-muted);
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+  }
+  
+  .category-cta {
+    margin-top: auto;
+  }
+  
+  .category-link {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    background: linear-gradient(45deg, var(--categoryColor), transparent);
+    color: white;
+    text-decoration: none;
+    border-radius: var(--radius-lg);
+    font-weight: bold;
+    transition: all 0.3s ease;
+    border: 2px solid var(--categoryColor);
+  }
+  
+  .category-link:hover {
+    background: var(--categoryColor);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  }
+  
+  .category-link:focus-visible {
+    outline: 3px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+  
+  @media (max-width: 768px) {
+    .category-card {
+      padding: 1.5rem;
+    }
+    
+    .category-icon {
+      font-size: 2.5rem;
+    }
+    
+    .category-title {
+      font-size: 1.25rem;
+    }
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const categoryCards = document.querySelectorAll('.category-card');
+    
+    categoryCards.forEach(card => {
+      card.addEventListener('mouseenter', () => {
+        card.style.transform = 'translateY(-10px) scale(1.02)';
+      });
+      
+      card.addEventListener('mouseleave', () => {
+        card.style.transform = 'translateY(0) scale(1)';
+      });
+      
+      // Click handler
+      card.addEventListener('click', (e) => {
+        if (e.target instanceof HTMLElement && !e.target.closest('.category-link')) {
+          const categoryId = card.getAttribute('data-category');
+          if (categoryId) {
+            window.location.href = `/categories/${categoryId}`;
+          }
+        }
+      });
+    });
+  });
+</script>
