@@ -10,9 +10,9 @@ collections:
     label: "Questions & Réponses"
     folder: "src/content/questions"
     create: true
-    slug: "{{category}}-{{fields.slug}}"
+    slug: "{{slug}}"
     fields:
-      - {label: "Slug", name: "slug", widget: "string", hint: "URL unique (ex: terre-ronde)"}
+      - {label: "Slug", name: "slug", widget: "string", hint: "URL unique (ex: terre-ronde-pourquoi)"}
       - {label: "Catégorie", name: "category", widget: "select", options: [
           {label: "🌍 Terre & Lune", value: "terre-lune"},
           {label: "☀️ Soleil & Étoiles", value: "soleil-etoiles"},
