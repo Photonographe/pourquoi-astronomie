@@ -11,7 +11,6 @@ tags:
   - atmosphère
   - lumière
   - diffusion
-  - ""
 difficulty: facile
 ---
 
