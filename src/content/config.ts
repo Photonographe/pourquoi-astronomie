@@ -17,8 +17,8 @@ const settingsCollection = defineCollection({
   schema: z.object({
     title: z.string(),
     description: z.string(),
-    contact_email: z.string().email(),
-    site_url: z.string().url(),
+    contact_email: z.string(),
+    site_url: z.string(),
   }),
 });
 
