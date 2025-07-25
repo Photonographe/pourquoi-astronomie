@@ -8,8 +8,8 @@ import { getAllQuestions, searchQuestions } from '../data/questions.ts';
 
 const url = Astro.url;
 const searchQuery = url.searchParams.get('q') || '';
-const allQuestions = getAllQuestions();
-const searchResults = searchQuery ? searchQuestions(searchQuery) : [];
+const allQuestions = await getAllQuestions();
+const searchResults = searchQuery ? await searchQuestions(searchQuery) : [];
 ---
 
 <Layout 
@@ -60,14 +60,6 @@ const searchResults = searchQuery ? searchQuestions(searchQuery) : [];
               <div class="no-results-icon">🔍</div>
               <h2>Aucun résultat trouvé</h2>
               <p>Désolé, nous n'avons pas trouvé de réponse pour "<strong>{searchQuery}</strong>".</p>
-              <div class="suggestions">
-                <h3>Quelques suggestions :</h3>
-                <ul>
-                  <li>Vérifie l'orthographe de ta recherche</li>
-                  <li>Essaie avec des mots plus simples</li>
-                  <li>Utilise des termes généraux comme "planète", "étoile", "espace"</li>
-                </ul>
-              </div>
               <a href="/" class="btn btn-primary">Retour à l'accueil</a>
             </div>
           )}
@@ -84,76 +76,14 @@ const searchResults = searchQuery ? searchQuestions(searchQuery) : [];
             Parcours toutes les questions et découvre les mystères de l'univers !
           </p>
           
-          <div class="questions-stats">
-            <div class="stat">
-              <span class="stat-number">{allQuestions.length}</span>
-              <span class="stat-label">Questions au total</span>
-            </div>
-            <div class="stat">
-              <span class="stat-number">6</span>
-              <span class="stat-label">Catégories</span>
-            </div>
-            <div class="stat">
-              <span class="stat-number">100%</span>
-              <span class="stat-label">Sources fiables</span>
-            </div>
-          </div>
-          
-          <div class="browse-categories">
-            <h3>Parcourir par catégorie</h3>
-            <div class="category-links">
-              <a href="/categories/terre-lune" class="category-link">🌍 Terre & Lune</a>
-              <a href="/categories/soleil-etoiles" class="category-link">☀️ Soleil & Étoiles</a>
-              <a href="/categories/planetes" class="category-link">🪐 Planètes</a>
-              <a href="/categories/exploration-spatiale" class="category-link">🚀 Exploration</a>
-              <a href="/categories/univers-galaxies" class="category-link">🌌 Univers</a>
-              <a href="/categories/astronautes" class="category-link">👨‍🚀 Astronautes</a>
-            </div>
-          </div>
-          
-          <div class="random-questions">
-            <h3>Questions aléatoires</h3>
-            <div class="questions-grid">
-              {allQuestions.slice(0, 6).map((question, index) => (
-                <QuestionItem question={question} index={index} />
-              ))}
-            </div>
-            <button class="btn btn-secondary" id="loadMoreQuestions">
-              Voir plus de questions
-            </button>
+          <div class="questions-grid">
+            {allQuestions.slice(0, 6).map((question, index) => (
+              <QuestionItem question={question} index={index} />
+            ))}
           </div>
         </div>
       </section>
     )}
-    
-    <!-- Search Tips -->
-    <section class="search-tips">
-      <div class="container">
-        <h2>Conseils de recherche</h2>
-        <div class="tips-grid">
-          <div class="tip">
-            <div class="tip-icon">💡</div>
-            <h3>Utilise des mots simples</h3>
-            <p>Essaie "planète" au lieu de "corps céleste"</p>
-          </div>
-          <div class="tip">
-            <div class="tip-icon">🔤</div>
-            <h3>Vérifie l'orthographe</h3>
-            <p>Assure-toi que tes mots sont bien écrits</p>
-          </div>
-          <div class="tip">
-            <div class="tip-icon">🎯</div>
-            <h3>Sois spécifique</h3>
-            <p>Ajoute des détails : "pourquoi Mars rouge"</p>
-          </div>
-          <div class="tip">
-            <div class="tip-icon">📂</div>
-            <h3>Explore les catégories</h3>
-            <p>Parcours nos 6 catégories d'astronomie</p>
-          </div>
-        </div>
-      </div>
-    </section>
   </main>
   
   <Footer />
@@ -196,7 +126,7 @@ const searchResults = searchQuery ? searchQuestions(searchQuery) : [];
   }
   
   .results-count {
-    color: var(--color-text-muted);
+    color: rgba(255, 255, 255, 0.8);
     font-size: 1.1rem;
   }
   
@@ -227,34 +157,6 @@ const searchResults = searchQuery ? searchQuestions(searchQuery) : [];
     opacity: 0.8;
   }
   
-  .suggestions {
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: var(--radius);
-    padding: 1.5rem;
-    margin: 2rem auto;
-    max-width: 500px;
-    text-align: left;
-  }
-  
-  .suggestions h3 {
-    color: var(--color-secondary);
-    margin-bottom: 1rem;
-  }
-  
-  .suggestions ul {
-    list-style: none;
-    padding: 0;
-  }
-  
-  .suggestions li {
-    padding: 0.5rem 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  }
-  
-  .suggestions li:last-child {
-    border-bottom: none;
-  }
-  
   .all-questions {
     padding: var(--space-xl) 0;
     background: rgba(0, 0, 0, 0.2);
@@ -274,155 +176,43 @@ const searchResults = searchQuery ? searchQuestions(searchQuery) : [];
     margin-bottom: 3rem;
   }
   
-  .questions-stats {
-    display: flex;
-    justify-content: center;
-    gap: 3rem;
-    margin-bottom: 4rem;
-  }
-  
-  .stat {
-    text-align: center;
-  }
-  
-  .stat-number {
-    display: block;
-    font-size: 2.5rem;
-    font-weight: bold;
-    color: var(--color-primary);
-  }
-  
-  .stat-label {
-    font-size: 0.9rem;
-    opacity: 0.8;
-  }
-  
-  .browse-categories {
-    margin-bottom: 4rem;
-  }
-  
-  .browse-categories h3 {
-    text-align: center;
-    color: var(--color-secondary);
-    margin-bottom: 2rem;
-  }
-  
-  .category-links {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1rem;
-    max-width: 800px;
+  .questions-grid {
+    max-width: 1000px;
     margin: 0 auto;
   }
   
-  .category-link {
-    display: block;
-    padding: 1rem;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: var(--radius);
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+  
+  .btn {
+    display: inline-block;
+    padding: 1rem 2rem;
+    background: var(--color-primary);
+    color: var(--color-dark);
     text-decoration: none;
-    color: var(--color-text);
+    border-radius: 25px;
+    font-weight: bold;
     transition: all 0.3s ease;
-    text-align: center;
   }
   
-  .category-link:hover {
-    background: rgba(255, 215, 0, 0.2);
-    transform: translateY(-5px);
+  .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(255, 215, 0, 0.3);
   }
   
-  .random-questions h3 {
-    text-align: center;
-    color: var(--color-secondary);
-    margin-bottom: 2rem;
-  }
-  
-  .questions-grid {
-    max-width: 1000px;
-    margin: 0 auto 2rem;
-  }
-  
-  .search-tips {
-    padding: var(--space-lg) 0;
-    background: rgba(255, 255, 255, 0.05);
-  }
-  
-  .search-tips h2 {
-    text-align: center;
-    color: var(--color-primary);
-    margin-bottom: 3rem;
-  }
-  
-  .tips-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 2rem;
-  }
-  
-  .tip {
-    text-align: center;
-    padding: 1.5rem;
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: var(--radius);
-  }
-  
-  .tip-icon {
-    font-size: 2rem;
-    margin-bottom: 1rem;
-  }
-  
-  .tip h3 {
-    color: var(--color-secondary);
-    margin-bottom: 0.5rem;
-  }
-  
-  .tip p {
-    opacity: 0.8;
-    font-size: 0.9rem;
+  :root {
+    --color-primary: #ffd700;
+    --color-dark: #0f0c29;
+    --space-lg: 4rem;
+    --space-xl: 6rem;
   }
   
   @media (max-width: 768px) {
     .page-title {
       font-size: 2rem;
     }
-    
-    .questions-stats {
-      gap: 1.5rem;
-    }
-    
-    .category-links {
-      grid-template-columns: 1fr 1fr;
-    }
-    
-    .tips-grid {
-      grid-template-columns: 1fr;
-    }
   }
 </style>
-
-<script>
-  import { getAllQuestions } from '../data/questions.ts';
-  
-  document.addEventListener('DOMContentLoaded', () => {
-    const loadMoreBtn = document.getElementById('loadMoreQuestions');
-    let currentIndex = 6;
-    
-    loadMoreBtn?.addEventListener('click', () => {
-      const allQuestions = getAllQuestions();
-      const questionsGrid = document.querySelector('.questions-grid');
-      const nextQuestions = allQuestions.slice(currentIndex, currentIndex + 6);
-      
-      nextQuestions.forEach((question, index) => {
-        const questionEl = document.createElement('div');
-        questionEl.innerHTML = `<!-- Question component would be rendered here -->`;
-        questionsGrid?.appendChild(questionEl);
-      });
-      
-      currentIndex += 6;
-      
-      if (currentIndex >= allQuestions.length) {
-        loadMoreBtn.style.display = 'none';
-      }
-    });
-  });
-</script>
