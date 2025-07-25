@@ -1,0 +1,287 @@
+---
+interface Props {
+  placeholder?: string;
+  initialValue?: string;
+}
+
+const { 
+  placeholder = "Tape ta question ici... Ex: Pourquoi le soleil brille-t-il ?",
+  initialValue = ""
+} = Astro.props;
+---
+
+<div class="search-container">
+  <form class="search-form" action="/search" method="get">
+    <input 
+      type="text" 
+      name="q"
+      class="search-input" 
+      placeholder={placeholder}
+      value={initialValue}
+      autocomplete="off"
+      aria-label="Rechercher des questions d'astronomie"
+    />
+    <button type="submit" class="search-button" aria-label="Rechercher">
+      🔍
+    </button>
+  </form>
+  <div class="search-suggestions" id="searchSuggestions"></div>
+</div>
+
+<style>
+  .search-container {
+    position: relative;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  
+  .search-form {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  
+  .search-input {
+    width: 100%;
+    padding: 1rem 4rem 1rem 1.5rem;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 50px;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    color: white;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+    font-family: inherit;
+  }
+  
+  .search-input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+  }
+  
+  .search-input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+    background: rgba(255, 255, 255, 0.2);
+  }
+  
+  .search-button {
+    position: absolute;
+    right: 10px;
+    background: var(--color-primary);
+    border: none;
+    padding: 0.7rem;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1.1rem;
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .search-button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+  }
+  
+  .search-button:focus-visible {
+    outline: 3px solid var(--color-secondary);
+    outline-offset: 2px;
+  }
+  
+  .search-suggestions {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: rgba(15, 12, 41, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: var(--radius);
+    margin-top: 0.5rem;
+    max-height: 300px;
+    overflow-y: auto;
+    z-index: 100;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    display: none;
+  }
+  
+  .search-suggestions.active {
+    display: block;
+  }
+  
+  .suggestion-item {
+    padding: 1rem 1.5rem;
+    cursor: pointer;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    transition: background 0.2s ease;
+  }
+  
+  .suggestion-item:hover {
+    background: rgba(255, 215, 0, 0.1);
+  }
+  
+  .suggestion-item:last-child {
+    border-bottom: none;
+  }
+  
+  .suggestion-question {
+    font-weight: bold;
+    color: var(--color-primary);
+    margin-bottom: 0.25rem;
+  }
+  
+  .suggestion-category {
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+  }
+  
+  @media (max-width: 768px) {
+    .search-input {
+      font-size: 1rem;
+      padding: 0.875rem 3.5rem 0.875rem 1.25rem;
+    }
+    
+    .search-button {
+      width: 40px;
+      height: 40px;
+      font-size: 1rem;
+    }
+  }
+</style>
+
+<script>
+  import { searchQuestions } from '../data/questions.ts';
+  
+  class SearchComponent {
+    private input: HTMLInputElement;
+    private suggestions: HTMLElement;
+    private currentSuggestions: any[] = [];
+    
+    constructor() {
+      this.input = document.querySelector('.search-input') as HTMLInputElement;
+      this.suggestions = document.querySelector('.search-suggestions') as HTMLElement;
+      
+      if (this.input && this.suggestions) {
+        this.setupEventListeners();
+      }
+    }
+    
+    private setupEventListeners() {
+      // Input events
+      this.input.addEventListener('input', this.handleInput.bind(this));
+      this.input.addEventListener('focus', this.handleFocus.bind(this));
+      this.input.addEventListener('blur', this.handleBlur.bind(this));
+      this.input.addEventListener('keydown', this.handleKeydown.bind(this));
+      
+      // Suggestions events
+      this.suggestions.addEventListener('click', this.handleSuggestionClick.bind(this));
+    }
+    
+    private handleInput(e: Event) {
+      const target = e.target as HTMLInputElement;
+      const query = target.value.trim();
+      
+      if (query.length >= 2) {
+        this.showSuggestions(query);
+      } else {
+        this.hideSuggestions();
+      }
+    }
+    
+    private handleFocus() {
+      if (this.input.value.trim().length >= 2) {
+        this.showSuggestions(this.input.value.trim());
+      }
+    }
+    
+    private handleBlur() {
+      // Delay to allow click on suggestion
+      setTimeout(() => {
+        this.hideSuggestions();
+      }, 200);
+    }
+    
+    private handleKeydown(e: KeyboardEvent) {
+      if (e.key === 'Escape') {
+        this.hideSuggestions();
+      }
+    }
+    
+    private showSuggestions(query: string) {
+      const results = searchQuestions(query).slice(0, 5);
+      this.currentSuggestions = results;
+      
+      if (results.length > 0) {
+        this.renderSuggestions(results);
+        this.suggestions.classList.add('active');
+      } else {
+        this.hideSuggestions();
+      }
+    }
+    
+    private hideSuggestions() {
+      this.suggestions.classList.remove('active');
+    }
+    
+    private renderSuggestions(results: any[]) {
+      this.suggestions.innerHTML = results.map(question => `
+        <div class="suggestion-item" data-question="${encodeURIComponent(question.question)}">
+          <div class="suggestion-question">${this.highlightMatch(question.question)}</div>
+          <div class="suggestion-category">${this.getCategoryName(question)}</div>
+        </div>
+      `).join('');
+    }
+    
+    private highlightMatch(text: string): string {
+      const query = this.input.value.trim().toLowerCase();
+      const index = text.toLowerCase().indexOf(query);
+      
+      if (index !== -1) {
+        return text.substring(0, index) + 
+               '<mark style="background: var(--color-primary); color: var(--color-dark); padding: 0 0.2em; border-radius: 3px;">' +
+               text.substring(index, index + query.length) + 
+               '</mark>' +
+               text.substring(index + query.length);
+      }
+      
+      return text;
+    }
+    
+    private getCategoryName(question: any): string {
+      const categoryNames: Record<string, string> = {
+        'terre-lune': '🌍 Terre & Lune',
+        'soleil-etoiles': '☀️ Soleil & Étoiles',
+        'planetes': '🪐 Planètes',
+        'exploration-spatiale': '🚀 Exploration',
+        'univers-galaxies': '🌌 Univers',
+        'astronautes': '👨‍🚀 Astronautes'
+      };
+      
+      return categoryNames[question.category] || 'Astronomie';
+    }
+    
+    private handleSuggestionClick(e: Event) {
+      const target = e.target as HTMLElement;
+      const suggestionItem = target.closest('.suggestion-item') as HTMLElement;
+      
+      if (suggestionItem) {
+        const question = suggestionItem.getAttribute('data-question');
+        if (question) {
+          this.input.value = decodeURIComponent(question);
+          this.hideSuggestions();
+          // Submit the form
+          (this.input.closest('form') as HTMLFormElement).submit();
+        }
+      }
+    }
+  }
+  
+  // Initialize when DOM is loaded
+  document.addEventListener('DOMContentLoaded', () => {
+    new SearchComponent();
+  });
+</script>
