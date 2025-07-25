@@ -10,18 +10,26 @@ collections:
     label: "Questions & Réponses"
     folder: "src/content/questions"
     create: true
-    slug: "{{category}}-{{slug}}"
+    slug: "{{category}}-{{fields.slug}}"
     fields:
-      - {label: "Catégorie", name: "category", widget: "select", options: ["terre-lune", "soleil-etoiles", "planetes", "exploration-spatiale", "univers-galaxies", "astronautes"]}
-      - {label: "Question", name: "question", widget: "string"}
-      - {label: "Réponse", name: "body", widget: "markdown"}
-      - {label: "Source", name: "source", widget: "string"}
-      - {label: "Fait amusant", name: "funFact", widget: "text", required: false}
-      - {label: "Tags", name: "tags", widget: "list", default: []}
-      - {label: "Difficulté", name: "difficulty", widget: "select", options: ["facile", "moyen", "difficile"]}
+      - {label: "Slug", name: "slug", widget: "string", hint: "URL unique (ex: terre-ronde)"}
+      - {label: "Catégorie", name: "category", widget: "select", options: [
+          {label: "🌍 Terre & Lune", value: "terre-lune"},
+          {label: "☀️ Soleil & Étoiles", value: "soleil-etoiles"},
+          {label: "🪐 Planètes", value: "planetes"},
+          {label: "🚀 Exploration spatiale", value: "exploration-spatiale"},
+          {label: "🌌 Univers & Galaxies", value: "univers-galaxies"},
+          {label: "👨‍🚀 Astronautes", value: "astronautes"}
+        ]}
+      - {label: "Question", name: "question", widget: "string", hint: "Ex: Pourquoi la Terre est-elle ronde ?"}
+      - {label: "Réponse", name: "body", widget: "markdown", hint: "Réponse complète en markdown"}
+      - {label: "Source", name: "source", widget: "string", hint: "Ex: NASA, ESA, Université..."}
+      - {label: "Fait amusant", name: "funFact", widget: "text", required: false, hint: "Anecdote intéressante (optionnel)"}
+      - {label: "Tags", name: "tags", widget: "list", default: [], hint: "Mots-clés pour la recherche"}
+      - {label: "Difficulté", name: "difficulty", widget: "select", options: ["facile", "moyen", "difficile"], default: "facile"}
       
   - name: "settings"
-    label: "Paramètres"
+    label: "Paramètres du site"
     files:
       - label: "Configuration générale"
         name: "general"
@@ -31,3 +39,6 @@ collections:
           - {label: "Description", name: "description", widget: "text"}
           - {label: "Email de contact", name: "contact_email", widget: "string"}
           - {label: "URL du site", name: "site_url", widget: "string"}
+
+editor:
+  preview: false
