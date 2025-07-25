@@ -1,0 +1,412 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import SearchBar from '../components/SearchBar.astro';
+import CategoryCard from '../components/CategoryCard.astro';
+import QuestionItem from '../components/QuestionItem.astro';
+import FunFact from '../components/FunFact.astro';
+import Footer from '../components/Footer.astro';
+import { categories, questions, getAllQuestions } from '../data/questions.ts';
+
+// Get featured questions (one from each category)
+const featuredQuestions = categories.map(category => {
+  const categoryQuestions = questions[category.id];
+  return categoryQuestions?.[0];
+}).filter(Boolean);
+
+const allQuestions = getAllQuestions();
+const totalQuestions = allQuestions.length;
+---
+
+<Layout 
+  title="Accueil" 
+  description="Découvre les mystères de l'univers ! Site éducatif d'astronomie pour enfants avec des réponses simples aux questions sur l'espace, les planètes et les étoiles."
+>
+  <!-- Skip link for accessibility -->
+  <a href="#main-content" class="skip-link">Aller au contenu principal</a>
+  
+  <Header />
+  
+  <main id="main-content">
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="hero-background">
+        <div class="stars-container" id="starsContainer"></div>
+      </div>
+      
+      <div class="hero-content">
+        <h1 class="hero-title">Découvre les mystères de l'univers !</h1>
+        <p class="hero-subtitle">
+          Pose toutes tes questions sur l'espace, les planètes, les étoiles et bien plus encore...
+        </p>
+        
+        <div class="hero-stats">
+          <div class="stat">
+            <span class="stat-number">{totalQuestions}+</span>
+            <span class="stat-label">Questions répondues</span>
+          </div>
+          <div class="stat">
+            <span class="stat-number">{categories.length}</span>
+            <span class="stat-label">Catégories</span>
+          </div>
+          <div class="stat">
+            <span class="stat-number">100%</span>
+            <span class="stat-label">Sources fiables</span>
+          </div>
+        </div>
+        
+        <SearchBar />
+        
+        <FunFact animated={true} />
+      </div>
+    </section>
+    
+    <!-- Categories Section -->
+    <section class="categories-section">
+      <div class="container">
+        <h2 class="section-title">Explore par catégorie</h2>
+        <p class="section-subtitle">
+          Choisis ton domaine préféré et découvre toutes les merveilles de l'astronomie !
+        </p>
+        
+        <div class="categories-grid">
+          {categories.map((category, index) => (
+            <CategoryCard 
+              category={category} 
+              featured={index === 0}
+            />
+          ))}
+        </div>
+      </div>
+    </section>
+    
+    <!-- Featured Questions Section -->
+    <section class="featured-questions">
+      <div class="container">
+        <h2 class="section-title">Questions populaires</h2>
+        <p class="section-subtitle">
+          Découvre les questions les plus fascinantes de nos jeunes astronomes !
+        </p>
+        
+        <div class="questions-grid">
+          {featuredQuestions.map((question, index) => (
+            <QuestionItem question={question} index={index} />
+          ))}
+        </div>
+        
+        <div class="cta-section">
+          <a href="/search" class="cta-button">
+            Voir toutes les questions
+          </a>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Call to Action -->
+    <section class="cta-banner">
+      <div class="container">
+        <h2>Une question qui te trotte dans la tête ?</h2>
+        <p>Utilise notre recherche pour trouver la réponse, ou explore nos catégories !</p>
+        <div class="cta-buttons">
+          <a href="/search" class="btn btn-primary">Rechercher une question</a>
+          <a href="/about" class="btn btn-secondary">En savoir plus</a>
+        </div>
+      </div>
+    </section>
+  </main>
+  
+  <Footer />
+</Layout>
+
+<style>
+  /* Hero Section */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    overflow: hidden;
+  }
+  
+  .hero-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, #0f0c29, #24243e, #302b63);
+  }
+  
+  .stars-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+  
+  .star {
+    position: absolute;
+    background: white;
+    border-radius: 50%;
+    animation: twinkle 3s infinite;
+  }
+  
+  .hero-content {
+    position: relative;
+    z-index: 1;
+    max-width: 1000px;
+    padding: var(--space-md);
+  }
+  
+  .hero-title {
+    font-size: 3.5rem;
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(45deg, #ffd700, #ff6b6b, #4ecdc4);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: float 3s ease-in-out infinite;
+  }
+  
+  .hero-subtitle {
+    font-size: 1.3rem;
+    margin-bottom: 3rem;
+    opacity: 0.9;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .hero-stats {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    margin-bottom: 3rem;
+  }
+  
+  .stat {
+    text-align: center;
+  }
+  
+  .stat-number {
+    display: block;
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: var(--color-primary);
+  }
+  
+  .stat-label {
+    font-size: 0.9rem;
+    opacity: 0.8;
+  }
+  
+  /* Sections */
+  .categories-section,
+  .featured-questions {
+    padding: var(--space-xl) 0;
+  }
+  
+  .featured-questions {
+    background: rgba(0, 0, 0, 0.3);
+  }
+  
+  .section-title {
+    font-size: 2.5rem;
+    text-align: center;
+    margin-bottom: 1rem;
+    color: var(--color-primary);
+  }
+  
+  .section-subtitle {
+    text-align: center;
+    font-size: 1.1rem;
+    opacity: 0.8;
+    margin-bottom: 3rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .categories-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+  }
+  
+  .questions-grid {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .cta-section {
+    text-align: center;
+    margin-top: 3rem;
+  }
+  
+  .cta-button {
+    display: inline-block;
+    padding: 1rem 2rem;
+    background: linear-gradient(45deg, var(--color-primary), var(--color-secondary));
+    color: var(--color-dark);
+    text-decoration: none;
+    border-radius: var(--radius-lg);
+    font-weight: bold;
+    transition: all 0.3s ease;
+    font-size: 1.1rem;
+  }
+  
+  .cta-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(255, 215, 0, 0.3);
+  }
+  
+  /* CTA Banner */
+  .cta-banner {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: var(--space-lg) 0;
+    text-align: center;
+  }
+  
+  .cta-banner h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+  
+  .cta-banner p {
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+    opacity: 0.9;
+  }
+  
+  .cta-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  
+  .btn-secondary {
+    background: transparent;
+    border: 2px solid var(--color-primary);
+    color: var(--color-primary);
+  }
+  
+  .btn-secondary:hover {
+    background: var(--color-primary);
+    color: var(--color-dark);
+  }
+  
+  /* Skip link */
+  .skip-link {
+    position: absolute;
+    top: -40px;
+    left: 6px;
+    background: var(--color-primary);
+    color: var(--color-dark);
+    padding: 8px 16px;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: bold;
+    z-index: 1000;
+    transition: top 0.3s ease;
+  }
+  
+  .skip-link:focus {
+    top: 6px;
+  }
+  
+  /* Responsive */
+  @media (max-width: 768px) {
+    .hero-title {
+      font-size: 2.5rem;
+    }
+    
+    .hero-subtitle {
+      font-size: 1.1rem;
+    }
+    
+    .hero-stats {
+      gap: 1.5rem;
+    }
+    
+    .stat-number {
+      font-size: 2rem;
+    }
+    
+    .categories-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .cta-buttons {
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .section-title {
+      font-size: 2rem;
+    }
+  }
+</style>
+
+<script>
+  // Create animated stars
+  function createStars() {
+    const starsContainer = document.getElementById('starsContainer');
+    if (!starsContainer) return;
+    
+    const numberOfStars = 100;
+    
+    for (let i = 0; i < numberOfStars; i++) {
+      const star = document.createElement('div');
+      star.className = 'star';
+      star.style.left = Math.random() * 100 + '%';
+      star.style.top = Math.random() * 100 + '%';
+      star.style.width = Math.random() * 3 + 1 + 'px';
+      star.style.height = star.style.width;
+      star.style.animationDelay = Math.random() * 3 + 's';
+      star.style.animationDuration = (Math.random() * 3 + 2) + 's';
+      starsContainer.appendChild(star);
+    }
+  }
+  
+  // Parallax effect for hero
+  function setupParallax() {
+    window.addEventListener('scroll', () => {
+      const scrolled = window.pageYOffset;
+      const rate = scrolled * -0.5;
+      const hero = document.querySelector('.hero-background') as HTMLElement;
+      if (hero) {
+        hero.style.transform = `translateY(${rate}px)`;
+      }
+    });
+  }
+  
+  // Intersection Observer for animations
+  function setupAnimations() {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('fade-in');
+        }
+      });
+    }, {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    });
+    
+    // Observe sections
+    document.querySelectorAll('.categories-section, .featured-questions, .cta-banner').forEach(section => {
+      observer.observe(section);
+    });
+  }
+  
+  // Initialize everything
+  document.addEventListener('DOMContentLoaded', () => {
+    createStars();
+    setupParallax();
+    setupAnimations();
+  });
+</script>
