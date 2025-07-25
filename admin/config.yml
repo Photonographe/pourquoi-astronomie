@@ -1,0 +1,31 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: "images"
+public_folder: "/images"
+
+collections:
+  - name: "pages"
+    label: "Pages"
+    files:
+      - label: "Page d'accueil"
+        name: "home"
+        file: "content/home.md"
+        fields:
+          - {label: "Titre", name: "title", widget: "string"}
+          - {label: "Description", name: "description", widget: "text"}
+          - {label: "Fait amusant", name: "fun_fact", widget: "text"}
+  
+  - name: "questions"
+    label: "Questions & Réponses"
+    folder: "content/questions"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - {label: "Catégorie", name: "category", widget: "select", options: ["terre-lune", "soleil-etoiles", "planetes", "exploration-spatiale", "univers-galaxies", "astronautes"]}
+      - {label: "Question", name: "question", widget: "string"}
+      - {label: "Réponse", name: "reponse", widget: "markdown"}
+      - {label: "Source", name: "source", widget: "string"}
+      - {label: "Fait amusant", name: "fun_fact", widget: "text", required: false}
+      - {label: "Icône", name: "icon", widget: "string", required: false}
