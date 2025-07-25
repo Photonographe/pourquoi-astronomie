@@ -1,0 +1,228 @@
+---
+import { getRandomFunFact } from '../data/questions.ts';
+
+interface Props {
+  fact?: string;
+  animated?: boolean;
+}
+
+const { fact, animated = true } = Astro.props;
+const randomFact = fact || getRandomFunFact();
+---
+
+<div class={`fun-fact-card ${animated ? 'animated' : ''}`} id="funFactCard">
+  <div class="fun-fact-header">
+    <span class="fun-fact-icon">💫</span>
+    <h3>Le savais-tu ?</h3>
+  </div>
+  <p class="fun-fact-text" id="funFactText">{randomFact}</p>
+  <button class="fun-fact-refresh" id="refreshFact" aria-label="Nouveau fait amusant">
+    🔄
+  </button>
+</div>
+
+<style>
+  .fun-fact-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    margin: 2rem auto;
+    max-width: 600px;
+    box-shadow: var(--shadow);
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .fun-fact-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transform: rotate(45deg);
+    transition: transform 0.6s ease;
+  }
+  
+  .fun-fact-card:hover::before {
+    transform: rotate(45deg) translateX(100%);
+  }
+  
+  .fun-fact-card.animated {
+    animation: float 6s ease-in-out infinite;
+  }
+  
+  .fun-fact-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .fun-fact-icon {
+    font-size: 2rem;
+    animation: pulse 2s ease-in-out infinite;
+  }
+  
+  .fun-fact-header h3 {
+    font-size: 1.5rem;
+    margin: 0;
+    color: var(--color-primary);
+    font-weight: bold;
+  }
+  
+  .fun-fact-text {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin: 0;
+    color: var(--color-text);
+    position: relative;
+    z-index: 1;
+  }
+  
+  .fun-fact-refresh {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+    z-index: 2;
+  }
+  
+  .fun-fact-refresh:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: rotate(180deg);
+  }
+  
+  .fun-fact-refresh:focus-visible {
+    outline: 3px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+  
+  .fun-fact-refresh.spinning {
+    animation: spin 0.6s ease-in-out;
+  }
+  
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+  }
+  
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+  }
+  
+  @keyframes fadeInOut {
+    0% { opacity: 1; transform: translateY(0); }
+    50% { opacity: 0; transform: translateY(-10px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+  
+  .fun-fact-text.changing {
+    animation: fadeInOut 0.6s ease-in-out;
+  }
+  
+  @media (max-width: 768px) {
+    .fun-fact-card {
+      margin: 1rem;
+      padding: 1.5rem;
+    }
+    
+    .fun-fact-header h3 {
+      font-size: 1.25rem;
+    }
+    
+    .fun-fact-text {
+      font-size: 1rem;
+    }
+  }
+</style>
+
+<script>
+  import { getRandomFunFact } from '../data/questions.ts';
+  
+  class FunFactComponent {
+    private factText: HTMLElement;
+    private refreshButton: HTMLElement;
+    private currentFact: string;
+    
+    constructor() {
+      this.factText = document.getElementById('funFactText') as HTMLElement;
+      this.refreshButton = document.getElementById('refreshFact') as HTMLElement;
+      this.currentFact = this.factText.textContent || '';
+      
+      this.setupEventListeners();
+      this.startAutoRefresh();
+    }
+    
+    private setupEventListeners() {
+      this.refreshButton?.addEventListener('click', this.refreshFact.bind(this));
+    }
+    
+    private async refreshFact() {
+      if (this.refreshButton.classList.contains('spinning')) return;
+      
+      this.refreshButton.classList.add('spinning');
+      this.factText.classList.add('changing');
+      
+      // Get new fact
+      let newFact = getRandomFunFact();
+      
+      // Ensure it's different from current fact
+      while (newFact === this.currentFact) {
+        newFact = getRandomFunFact();
+      }
+      
+      // Update after animation
+      setTimeout(() => {
+        this.factText.textContent = newFact;
+        this.currentFact = newFact;
+      }, 300);
+      
+      // Remove animations
+      setTimeout(() => {
+        this.refreshButton.classList.remove('spinning');
+        this.factText.classList.remove('changing');
+      }, 600);
+      
+      // Track analytics
+      this.trackFactRefresh();
+    }
+    
+    private startAutoRefresh() {
+      // Auto-refresh every 30 seconds
+      setInterval(() => {
+        if (!document.hidden) {
+          this.refreshFact();
+        }
+      }, 30000);
+    }
+    
+    private trackFactRefresh() {
+      if (typeof gtag !== 'undefined') {
+        gtag('event', 'fun_fact_refreshed', {
+          'event_category': 'engagement',
+          'event_label': 'manual_refresh'
+        });
+      }
+    }
+  }
+  
+  // Initialize when DOM is loaded
+  document.addEventListener('DOMContentLoaded', () => {
+    new FunFactComponent();
+  });
+</script>
