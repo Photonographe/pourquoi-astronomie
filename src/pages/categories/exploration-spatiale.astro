@@ -1,0 +1,486 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import QuestionItem from '../../components/QuestionItem.astro';
+import Footer from '../../components/Footer.astro';
+import { getCategoryById, getQuestionsByCategory } from '../../data/questions.ts';
+
+const categoryId = 'exploration-spatiale';
+const category = getCategoryById(categoryId);
+const questions = getQuestionsByCategory(categoryId);
+
+if (!category) {
+  return Astro.redirect('/404');
+}
+---
+
+<Layout 
+  title={category.name}
+  description={`${category.description} - ${questions.length} questions répondues avec sources scientifiques fiables.`}
+>
+  <Header />
+  
+  <main class="category-page">
+    <!-- Hero Section -->
+    <section class="category-hero" style={`--category-color: ${category.color}`}>
+      <div class="container">
+        <div class="category-header">
+          <div class="category-icon-large">{category.icon}</div>
+          <div class="category-info">
+            <h1 class="category-title">{category.name}</h1>
+            <p class="category-description">{category.description}</p>
+            <div class="category-stats">
+              <span class="stat">{questions.length} questions</span>
+              <span class="stat">Sources NASA & ESA</span>
+              <span class="stat">Niveau débutant</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Navigation -->
+    <section class="category-nav">
+      <div class="container">
+        <nav class="breadcrumb">
+          <a href="/">Accueil</a>
+          <span class="separator">></span>
+          <a href="/search">Catégories</a>
+          <span class="separator">></span>
+          <span class="current">{category.name}</span>
+        </nav>
+        
+        <div class="category-actions">
+          <a href="/search" class="btn-secondary">Rechercher</a>
+          <button class="btn-primary" id="randomQuestion">Question aléatoire</button>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Introduction -->
+    <section class="category-intro">
+      <div class="container">
+        <div class="intro-content">
+          <h2>Découvre les secrets de notre planète bleue</h2>
+          <p>
+            La Terre et la Lune forment un duo fascinant dans notre système solaire. 
+            Notre planète, la seule connue à abriter la vie, cache de nombreux mystères. 
+            Sa fidèle compagne, la Lune, influence nos marées et éclaire nos nuits depuis 
+            des milliards d'années.
+          </p>
+          
+          <div class="fun-facts-grid">
+            <div class="fun-fact-item">
+              <div class="fact-icon">🌍</div>
+              <div class="fact-text">
+                <strong>4,6 milliards d'années</strong>
+                <span>Âge de la Terre</span>
+              </div>
+            </div>
+            <div class="fun-fact-item">
+              <div class="fact-icon">🌙</div>
+              <div class="fact-text">
+                <strong>384 400 km</strong>
+                <span>Distance Terre-Lune</span>
+              </div>
+            </div>
+            <div class="fun-fact-item">
+              <div class="fact-icon">💧</div>
+              <div class="fact-text">
+                <strong>71%</strong>
+                <span>Surface couverte d'eau</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Questions Section -->
+    <section class="questions-section">
+      <div class="container">
+        <div class="section-header">
+          <h2>Toutes les questions sur {category.name}</h2>
+          <p>Explore toutes nos réponses scientifiquement vérifiées</p>
+        </div>
+        
+        <div class="questions-filters">
+          <button class="filter-btn active" data-filter="all">Toutes</button>
+          <button class="filter-btn" data-filter="facile">Faciles</button>
+          <button class="filter-btn" data-filter="moyen">Moyennes</button>
+          <button class="filter-btn" data-filter="difficile">Difficiles</button>
+        </div>
+        
+        <div class="questions-grid">
+          {questions.map((question, index) => (
+            <QuestionItem question={question} index={index} />
+          ))}
+        </div>
+        
+        {questions.length === 0 && (
+          <div class="no-questions">
+            <div class="no-questions-icon">🔍</div>
+            <h3>Aucune question pour le moment</h3>
+            <p>Cette catégorie sera bientôt enrichie avec de nouvelles questions !</p>
+            <a href="/" class="btn-primary">Retour à l'accueil</a>
+          </div>
+        )}
+      </div>
+    </section>
+    
+    <!-- Related Categories -->
+    <section class="related-categories">
+      <div class="container">
+        <h2>Catégories associées</h2>
+        <div class="related-grid">
+          <a href="/categories/soleil-etoiles" class="related-card">
+            <div class="related-icon">☀️</div>
+            <h3>Soleil & Étoiles</h3>
+            <p>Découvre pourquoi le soleil brille</p>
+          </a>
+          <a href="/categories/planetes" class="related-card">
+            <div class="related-icon">🪐</div>
+            <h3>Les Planètes</h3>
+            <p>Voyage dans le système solaire</p>
+          </a>
+          <a href="/categories/exploration-spatiale" class="related-card">
+            <div class="related-icon">🚀</div>
+            <h3>Exploration</h3>
+            <p>Les missions vers l'espace</p>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+  
+  <Footer />
+</Layout>
+
+<style>
+  .category-hero {
+    background: linear-gradient(135deg, var(--category-color), #0f0c29);
+    padding: var(--space-xl) 0;
+  }
+  
+  .category-header {
+    display: flex;
+    align-items: center;
+    gap: 3rem;
+  }
+  
+  .category-icon-large {
+    font-size: 5rem;
+    animation: float 3s ease-in-out infinite;
+  }
+  
+  .category-title {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    color: white;
+  }
+  
+  .category-description {
+    font-size: 1.2rem;
+    opacity: 0.9;
+    margin-bottom: 1.5rem;
+    max-width: 500px;
+  }
+  
+  .category-stats {
+    display: flex;
+    gap: 2rem;
+  }
+  
+  .stat {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-lg);
+    font-size: 0.9rem;
+  }
+  
+  .category-nav {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 1rem 0;
+  }
+  
+  .container > div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .breadcrumb a {
+    color: var(--color-text-muted);
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+  
+  .breadcrumb a:hover {
+    color: var(--color-primary);
+  }
+  
+  .separator {
+    color: var(--color-text-muted);
+  }
+  
+  .current {
+    color: var(--color-primary);
+    font-weight: bold;
+  }
+  
+  .category-actions {
+    display: flex;
+    gap: 1rem;
+  }
+  
+  .category-intro {
+    padding: var(--space-xl) 0;
+    background: rgba(255, 255, 255, 0.02);
+  }
+  
+  .intro-content h2 {
+    color: var(--color-primary);
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+  
+  .intro-content p {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    opacity: 0.9;
+    max-width: 800px;
+    margin: 0 auto 3rem;
+    text-align: center;
+  }
+  
+  .fun-facts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  
+  .fun-fact-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 1.5rem;
+    border-radius: var(--radius);
+  }
+  
+  .fact-icon {
+    font-size: 2rem;
+  }
+  
+  .fact-text strong {
+    display: block;
+    color: var(--color-primary);
+    font-size: 1.2rem;
+  }
+  
+  .fact-text span {
+    opacity: 0.8;
+    font-size: 0.9rem;
+  }
+  
+  .questions-section {
+    padding: var(--space-xl) 0;
+  }
+  
+  .section-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+  
+  .section-header h2 {
+    color: var(--color-primary);
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .section-header p {
+    opacity: 0.8;
+    font-size: 1.1rem;
+  }
+  
+  .questions-filters {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 3rem;
+  }
+  
+  .filter-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid transparent;
+    color: var(--color-text);
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .filter-btn:hover,
+  .filter-btn.active {
+    background: var(--color-primary);
+    color: var(--color-dark);
+    border-color: var(--color-primary);
+  }
+  
+  .questions-grid {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .no-questions {
+    text-align: center;
+    padding: 4rem 0;
+  }
+  
+  .no-questions-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+  }
+  
+  .no-questions h3 {
+    color: var(--color-primary);
+    margin-bottom: 1rem;
+  }
+  
+  .related-categories {
+    padding: var(--space-xl) 0;
+    background: rgba(0, 0, 0, 0.3);
+  }
+  
+  .related-categories h2 {
+    text-align: center;
+    color: var(--color-primary);
+    margin-bottom: 3rem;
+  }
+  
+  .related-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+  }
+  
+  .related-card {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius);
+    padding: 2rem;
+    text-align: center;
+    text-decoration: none;
+    color: var(--color-text);
+    transition: all 0.3s ease;
+  }
+  
+  .related-card:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-5px);
+  }
+  
+  .related-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .related-card h3 {
+    color: var(--color-secondary);
+    margin-bottom: 0.5rem;
+  }
+  
+  .related-card p {
+    opacity: 0.8;
+    font-size: 0.9rem;
+  }
+  
+  @media (max-width: 768px) {
+    .category-header {
+      flex-direction: column;
+      text-align: center;
+      gap: 2rem;
+    }
+    
+    .category-title {
+      font-size: 2rem;
+    }
+    
+    .container > div {
+      flex-direction: column;
+      gap: 1rem;
+    }
+    
+    .category-actions {
+      width: 100%;
+      justify-content: center;
+    }
+    
+    .questions-filters {
+      flex-wrap: wrap;
+    }
+    
+    .fun-facts-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<script>
+  import { getQuestionsByCategory } from '../../data/questions.ts';
+  
+  document.addEventListener('DOMContentLoaded', () => {
+    // Filter functionality
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const questions = document.querySelectorAll('.question-item');
+    
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        // Update active button
+        filterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        
+        const filter = btn.getAttribute('data-filter');
+        
+        // Filter questions
+        questions.forEach(question => {
+          if (filter === 'all') {
+            question.style.display = 'block';
+          } else {
+            const difficulty = question.getAttribute('data-difficulty');
+            question.style.display = difficulty === filter ? 'block' : 'none';
+          }
+        });
+      });
+    });
+    
+    // Random question
+    const randomBtn = document.getElementById('randomQuestion');
+    randomBtn?.addEventListener('click', () => {
+      const visibleQuestions = Array.from(questions).filter(q => 
+        q.style.display !== 'none'
+      );
+      
+      if (visibleQuestions.length > 0) {
+        const randomIndex = Math.floor(Math.random() * visibleQuestions.length);
+        const randomQuestion = visibleQuestions[randomIndex];
+        
+        // Scroll to question and open it
+        randomQuestion.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        setTimeout(() => {
+          const header = randomQuestion.querySelector('.question-header');
+          header?.click();
+        }, 500);
+      }
+    });
+  });
+</script>
