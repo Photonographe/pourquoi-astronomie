@@ -1,0 +1,636 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { getAllQuestions, categories } from '../data/questions.ts';
+
+const totalQuestions = getAllQuestions().length;
+---
+
+<Layout 
+  title="À propos"
+  description="Découvrez l'histoire de Pourquoi ? L'astronomie, site éducatif dédié aux questions d'astronomie pour enfants, avec des sources scientifiques fiables."
+>
+  <Header />
+  
+  <main class="about-page">
+    <!-- Hero Section -->
+    <section class="about-hero">
+      <div class="container">
+        <h1 class="page-title">À propos de Pourquoi ? L'astronomie</h1>
+        <p class="page-subtitle">
+          Un voyage éducatif dans l'univers, conçu spécialement pour les jeunes explorateurs de l'espace
+        </p>
+      </div>
+    </section>
+    
+    <!-- Mission Section -->
+    <section class="mission-section">
+      <div class="container">
+        <div class="mission-content">
+          <div class="mission-text">
+            <h2>Notre mission</h2>
+            <p>
+              "Pourquoi ? L'astronomie" est né d'une passion : rendre l'astronomie accessible et passionnante 
+              pour les jeunes esprits curieux. Nous croyons que chaque enfant mérite des réponses claires 
+              et scientifiquement exactes à ses questions sur l'univers.
+            </p>
+            <p>
+              Notre site propose des explications simples mais rigoureuses, basées sur les dernières 
+              découvertes scientifiques et les sources les plus fiables du domaine spatial.
+            </p>
+          </div>
+          <div class="mission-stats">
+            <div class="stat-card">
+              <div class="stat-number">{totalQuestions}+</div>
+              <div class="stat-label">Questions répondues</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-number">{categories.length}</div>
+              <div class="stat-label">Catégories</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-number">100%</div>
+              <div class="stat-label">Sources fiables</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Sources Section -->
+    <section class="sources-section">
+      <div class="container">
+        <h2 class="section-title">Sources scientifiques</h2>
+        <p class="section-subtitle">
+          Toutes nos réponses sont basées sur des sources scientifiques reconnues internationalement
+        </p>
+        
+        <div class="sources-grid">
+          <div class="source-card">
+            <div class="source-logo">🚀</div>
+            <h3>NASA</h3>
+            <p>National Aeronautics and Space Administration</p>
+            <ul>
+              <li>NASA Space Place</li>
+              <li>Données missions spatiales</li>
+              <li>Découvertes télescope Hubble</li>
+            </ul>
+          </div>
+          
+          <div class="source-card">
+            <div class="source-logo">🌍</div>
+            <h3>ESA</h3>
+            <p>Agence Spatiale Européenne</p>
+            <ul>
+              <li>ESA Kids</li>
+              <li>Missions européennes</li>
+              <li>Recherche spatiale</li>
+            </ul>
+          </div>
+          
+          <div class="source-card">
+            <div class="source-logo">🇫🇷</div>
+            <h3>CNES</h3>
+            <p>Centre National d'Études Spatiales</p>
+            <ul>
+              <li>Programme spatial français</li>
+              <li>Missions scientifiques</li>
+              <li>Recherche astronomique</li>
+            </ul>
+          </div>
+          
+          <div class="source-card">
+            <div class="source-logo">🔭</div>
+            <h3>James Webb</h3>
+            <p>Télescope Spatial James Webb</p>
+            <ul>
+              <li>Dernières découvertes</li>
+              <li>Images infrarouge</li>
+              <li>Exploration cosmos</li>
+            </ul>
+          </div>
+          
+          <div class="source-card">
+            <div class="source-logo">🎓</div>
+            <h3>Universités</h3>
+            <p>Institutions académiques</p>
+            <ul>
+              <li>Université de Genève</li>
+              <li>MNHN Paris</li>
+              <li>Recherche scientifique</li>
+            </ul>
+          </div>
+          
+          <div class="source-card">
+            <div class="source-logo">📚</div>
+            <h3>Planétariums</h3>
+            <p>Centres de diffusion scientifique</p>
+            <ul>
+              <li>Espace pour la Vie</li>
+              <li>Planétarium de Paris</li>
+              <li>Médiation scientifique</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Approach Section -->
+    <section class="approach-section">
+      <div class="container">
+        <h2 class="section-title">Notre approche pédagogique</h2>
+        
+        <div class="approach-grid">
+          <div class="approach-item">
+            <div class="approach-icon">🧠</div>
+            <h3>Langage adapté</h3>
+            <p>
+              Nous utilisons un vocabulaire simple et des comparaisons du quotidien 
+              pour expliquer les concepts les plus complexes de l'astronomie.
+            </p>
+          </div>
+          
+          <div class="approach-item">
+            <div class="approach-icon">🔬</div>
+            <h3>Rigueur scientifique</h3>
+            <p>
+              Chaque réponse est vérifiée et basée sur des sources officielles. 
+              Nous nous assurons de l'exactitude de chaque information partagée.
+            </p>
+          </div>
+          
+          <div class="approach-item">
+            <div class="approach-icon">🎯</div>
+            <h3>Curiosité encouragée</h3>
+            <p>
+              Nous croyons que chaque question mérite une réponse et que la curiosité 
+              est le moteur de l'apprentissage et de la découverte.
+            </p>
+          </div>
+          
+          <div class="approach-item">
+            <div class="approach-icon">🌟</div>
+            <h3>Émerveillement</h3>
+            <p>
+              L'astronomie est fascinante ! Nous partageons cette passion et 
+              cette fascination pour l'univers avec chaque jeune lecteur.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Values Section -->
+    <section class="values-section">
+      <div class="container">
+        <h2 class="section-title">Nos valeurs</h2>
+        
+        <div class="values-content">
+          <div class="value-card">
+            <h3>🎓 Éducation</h3>
+            <p>
+              Nous croyons fermement que l'éducation scientifique est un droit 
+              et que chaque enfant devrait avoir accès à des explications claires 
+              sur le fonctionnement de l'univers.
+            </p>
+          </div>
+          
+          <div class="value-card">
+            <h3>🌍 Accessibilité</h3>
+            <p>
+              Notre site est gratuit, accessible à tous et conçu pour être 
+              compréhensible par les enfants de tous horizons et de tous niveaux.
+            </p>
+          </div>
+          
+          <div class="value-card">
+            <h3>🔍 Transparence</h3>
+            <p>
+              Nous citons toujours nos sources et expliquons clairement quand 
+              quelque chose n'est pas encore parfaitement compris par la science.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Future Section -->
+    <section class="future-section">
+      <div class="container">
+        <h2 class="section-title">L'avenir du site</h2>
+        
+        <div class="future-content">
+          <div class="future-text">
+            <p>
+              "Pourquoi ? L'astronomie" continue d'évoluer avec les découvertes scientifiques. 
+              Nous mettons régulièrement à jour notre contenu avec les dernières avancées 
+              de l'exploration spatiale et de la recherche astronomique.
+            </p>
+            
+            <h3>Projets à venir :</h3>
+            <ul class="future-list">
+              <li>🔭 Intégration des découvertes du télescope James Webb</li>
+              <li>🎮 Jeux éducatifs interactifs</li>
+              <li>📱 Application mobile</li>
+              <li>🌍 Extension multilingue</li>
+              <li>👨‍🏫 Ressources pour enseignants</li>
+              <li>🎥 Vidéos explicatives</li>
+            </ul>
+          </div>
+          
+          <div class="future-visual">
+            <div class="orbit-animation">
+              <div class="sun">☀️</div>
+              <div class="planet planet-1">🌍</div>
+              <div class="planet planet-2">🪐</div>
+              <div class="planet planet-3">🚀</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Contact Section -->
+    <section class="contact-section">
+      <div class="container">
+        <h2 class="section-title">Une question ? Une suggestion ?</h2>
+        <p class="section-subtitle">
+          N'hésite pas à nous contacter ! Nous adorons recevoir des questions 
+          et des suggestions de nos jeunes astronomes.
+        </p>
+        
+        <div class="contact-cards">
+          <div class="contact-card">
+            <div class="contact-icon">✉️</div>
+            <h3>Email</h3>
+            <p>contact@pourquoi-astronomie.fr</p>
+          </div>
+          
+          <div class="contact-card">
+            <div class="contact-icon">💡</div>
+            <h3>Nouvelles questions</h3>
+            <p>Envoie-nous tes questions et nous y répondrons !</p>
+          </div>
+          
+          <div class="contact-card">
+            <div class="contact-icon">🐛</div>
+            <h3>Signaler un problème</h3>
+            <p>Tu as trouvé une erreur ? Aide-nous à l'améliorer !</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  
+  <Footer />
+</Layout>
+
+<style>
+  .about-page {
+    padding-top: 0;
+  }
+  
+  .about-hero {
+    background: linear-gradient(135deg, #0f0c29, #24243e, #302b63);
+    padding: var(--space-xl) 0;
+    text-align: center;
+  }
+  
+  .page-title {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    color: var(--color-primary);
+  }
+  
+  .page-subtitle {
+    font-size: 1.2rem;
+    opacity: 0.9;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  
+  .mission-section {
+    padding: var(--space-xl) 0;
+  }
+  
+  .mission-content {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 4rem;
+    align-items: center;
+  }
+  
+  .mission-text h2 {
+    color: var(--color-primary);
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+  }
+  
+  .mission-text p {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+    opacity: 0.9;
+  }
+  
+  .mission-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  
+  .stat-card {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    text-align: center;
+    border-left: 4px solid var(--color-primary);
+  }
+  
+  .stat-number {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: var(--color-primary);
+    display: block;
+  }
+  
+  .stat-label {
+    opacity: 0.8;
+    font-size: 0.9rem;
+  }
+  
+  .sources-section {
+    padding: var(--space-xl) 0;
+    background: rgba(0, 0, 0, 0.3);
+  }
+  
+  .section-title {
+    font-size: 2.5rem;
+    text-align: center;
+    margin-bottom: 1rem;
+    color: var(--color-primary);
+  }
+  
+  .section-subtitle {
+    text-align: center;
+    font-size: 1.1rem;
+    opacity: 0.8;
+    margin-bottom: 3rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .sources-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+  }
+  
+  .source-card {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius);
+    padding: 2rem;
+    text-align: center;
+    transition: all 0.3s ease;
+  }
+  
+  .source-card:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-5px);
+  }
+  
+  .source-logo {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+  }
+  
+  .source-card h3 {
+    color: var(--color-secondary);
+    margin-bottom: 0.5rem;
+  }
+  
+  .source-card p {
+    opacity: 0.8;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+  }
+  
+  .source-card ul {
+    list-style: none;
+    padding: 0;
+    text-align: left;
+  }
+  
+  .source-card li {
+    padding: 0.25rem 0;
+    font-size: 0.9rem;
+    opacity: 0.7;
+  }
+  
+  .source-card li::before {
+    content: "→ ";
+    color: var(--color-primary);
+  }
+  
+  .approach-section {
+    padding: var(--space-xl) 0;
+  }
+  
+  .approach-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+  }
+  
+  .approach-item {
+    text-align: center;
+    padding: 2rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: var(--radius);
+  }
+  
+  .approach-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+  }
+  
+  .approach-item h3 {
+    color: var(--color-secondary);
+    margin-bottom: 1rem;
+  }
+  
+  .approach-item p {
+    opacity: 0.8;
+    line-height: 1.6;
+  }
+  
+  .values-section {
+    padding: var(--space-xl) 0;
+    background: rgba(0, 0, 0, 0.3);
+  }
+  
+  .values-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+  }
+  
+  .value-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: var(--radius);
+    padding: 2rem;
+  }
+  
+  .value-card h3 {
+    color: var(--color-primary);
+    margin-bottom: 1rem;
+    font-size: 1.3rem;
+  }
+  
+  .value-card p {
+    line-height: 1.6;
+  }
+  
+  .future-section {
+    padding: var(--space-xl) 0;
+  }
+  
+  .future-content {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 4rem;
+    align-items: center;
+  }
+  
+  .future-text h3 {
+    color: var(--color-secondary);
+    margin: 2rem 0 1rem;
+  }
+  
+  .future-text p {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    opacity: 0.9;
+  }
+  
+  .future-list {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .future-list li {
+    padding: 0.5rem 0;
+    font-size: 1.1rem;
+  }
+  
+  .orbit-animation {
+    position: relative;
+    width: 300px;
+    height: 300px;
+    margin: 0 auto;
+  }
+  
+  .sun {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 3rem;
+    animation: rotate 20s linear infinite;
+  }
+  
+  .planet {
+    position: absolute;
+    font-size: 2rem;
+    animation: orbit linear infinite;
+  }
+  
+  .planet-1 {
+    animation-duration: 10s;
+    top: 20%;
+    left: 20%;
+  }
+  
+  .planet-2 {
+    animation-duration: 15s;
+    top: 60%;
+    right: 20%;
+  }
+  
+  .planet-3 {
+    animation-duration: 8s;
+    bottom: 20%;
+    left: 40%;
+  }
+  
+  @keyframes rotate {
+    from { transform: translate(-50%, -50%) rotate(0deg); }
+    to { transform: translate(-50%, -50%) rotate(360deg); }
+  }
+  
+  @keyframes orbit {
+    from { transform: rotate(0deg) translateX(100px) rotate(0deg); }
+    to { transform: rotate(360deg) translateX(100px) rotate(-360deg); }
+  }
+  
+  .contact-section {
+    padding: var(--space-xl) 0;
+    background: rgba(0, 0, 0, 0.3);
+  }
+  
+  .contact-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+  }
+  
+  .contact-card {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius);
+    padding: 2rem;
+    text-align: center;
+    transition: all 0.3s ease;
+  }
+  
+  .contact-card:hover {
+    background: rgba(255, 215, 0, 0.1);
+    transform: translateY(-5px);
+  }
+  
+  .contact-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .contact-card h3 {
+    color: var(--color-secondary);
+    margin-bottom: 1rem;
+  }
+  
+  .contact-card p {
+    opacity: 0.8;
+  }
+  
+  @media (max-width: 768px) {
+    .page-title {
+      font-size: 2rem;
+    }
+    
+    .mission-content,
+    .future-content {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+    
+    .sources-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .orbit-animation {
+      width: 200px;
+      height: 200px;
+    }
+  }
+</style>
