@@ -1,0 +1,111 @@
+/* Animations globales */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 1; }
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+/* Variables CSS */
+:root {
+  --color-primary: #ffd700;
+  --color-secondary: #4ecdc4;
+  --color-accent: #ff6b6b;
+  --color-dark: #0f0c29;
+  --color-dark-secondary: #24243e;
+  --color-text: #ffffff;
+  --color-text-muted: rgba(255, 255, 255, 0.8);
+  
+  --space-xs: 0.5rem;
+  --space-sm: 1rem;
+  --space-md: 2rem;
+  --space-lg: 4rem;
+  --space-xl: 6rem;
+  
+  --radius: 15px;
+  --radius-sm: 8px;
+  --radius-lg: 25px;
+  
+  --shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+  --shadow-sm: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Utilities */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--space-md);
+}
+
+.text-center { text-align: center; }
+.text-primary { color: var(--color-primary); }
+.text-secondary { color: var(--color-secondary); }
+.text-muted { color: var(--color-text-muted); }
+
+.btn {
+  display: inline-block;
+  padding: var(--space-sm) var(--space-md);
+  background: var(--color-primary);
+  color: var(--color-dark);
+  text-decoration: none;
+  border-radius: var(--radius-lg);
+  font-weight: bold;
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(255, 215, 0, 0.3);
+}
+
+.btn:focus-visible {
+  outline: 3px solid var(--color-secondary);
+  outline-offset: 2px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .container {
+    padding: 0 var(--space-sm);
+  }
+  
+  :root {
+    --space-lg: 2rem;
+    --space-xl: 3rem;
+  }
+}
+
+/* Animation d'entrée */
+.fade-in {
+  animation: fadeIn 0.6s ease-out;
+}
+
+.slide-up {
+  animation: slideDown 0.6s ease-out reverse;
+}
+
+/* Loading state */
+.loading {
+  opacity: 0.6;
+  pointer-events: none;
+}
