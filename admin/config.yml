@@ -6,28 +6,12 @@ media_folder: "public/images"
 public_folder: "/images"
 
 collections:
-  - name: "questions"
-    label: "Questions & Réponses"
-    folder: "src/content/questions"
-    create: true
-    slug: "{{category}}-{{slug}}"
-    fields:
-      - {label: "Catégorie", name: "category", widget: "select", options: ["terre-lune", "soleil-etoiles", "planetes", "exploration-spatiale", "univers-galaxies", "astronautes"]}
-      - {label: "Question", name: "question", widget: "string"}
-      - {label: "Réponse", name: "reponse", widget: "markdown"}
-      - {label: "Source", name: "source", widget: "string"}
-      - {label: "Fait amusant", name: "funFact", widget: "text", required: false}
-      - {label: "Tags", name: "tags", widget: "list", default: []}
-      - {label: "Difficulté", name: "difficulty", widget: "select", options: ["facile", "moyen", "difficile"]}
-      
-  - name: "settings"
-    label: "Paramètres"
+  - name: "pages"
+    label: "Pages"
     files:
-      - label: "Configuration générale"
-        name: "general"
-        file: "src/content/settings/general.md"
+      - label: "Page d'accueil"
+        name: "home"
+        file: "content/home.md"
         fields:
-          - {label: "Titre du site", name: "title", widget: "string"}
+          - {label: "Titre", name: "title", widget: "string"}
           - {label: "Description", name: "description", widget: "text"}
-          - {label: "Email de contact", name: "contact_email", widget: "string"}
-          - {label: "URL du site", name: "site_url", widget: "string"}
