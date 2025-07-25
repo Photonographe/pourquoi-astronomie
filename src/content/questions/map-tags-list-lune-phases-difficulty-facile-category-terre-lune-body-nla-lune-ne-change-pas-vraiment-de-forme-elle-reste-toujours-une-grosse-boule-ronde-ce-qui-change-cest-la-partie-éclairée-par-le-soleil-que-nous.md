@@ -7,7 +7,6 @@ funFact: Il faut environ 29 jours pour que la Lune fasse un tour complet de ses 
 tags:
   - lune
   - phases
-  - ""
 difficulty: facile
 ---
 
